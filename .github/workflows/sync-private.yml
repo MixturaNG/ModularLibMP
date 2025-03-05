@@ -1,0 +1,45 @@
+name: Sync Private Repo
+on:
+  pull_request:
+    types: [closed]  # Триггер при закрытии PR (мердже)
+    branches: [main]  # Только для основной ветки
+
+jobs:
+  sync:
+    runs-on: ubuntu-latest
+    steps:
+      # Шаг 1: Клонируем публичный репозиторий
+      - name: Checkout public repo
+        uses: actions/checkout@v4
+        with:
+          path: public-repo
+
+      # Шаг 2: Клонируем приватный репозиторий
+      - name: Checkout private repo
+        uses: actions/checkout@v4
+        with:
+          repository: MixturaNG/PrivateModularLibMP
+          token: ${{ secrets.ACCESS_TOKEN }}  # Токен для доступа к приватному репо
+          path: private-repo
+
+      # Шаг 3: Создаем новую ветку в приватном репозитории
+      - name: Create new branch
+        run: |
+          cd private-repo
+          git checkout -b sync-from-public-$(date +%Y%m%d%H%M%S)
+          git push origin HEAD
+
+      # Шаг 4: Копируем изменения из публичного репозитория в приватный
+      - name: Copy changes from public to private
+        run: |
+          rsync -av --exclude='.git/' public-repo/Src/ private-repo/Src/
+
+      # Шаг 5: Коммитим и пушим изменения в приватный репозиторий
+      - name: Commit and push changes
+        run: |
+          cd private-repo
+          git config --global user.email "info@srvhleb.ru"
+          git config --global user.name "SRVHLEB Automated Commit"
+          git add .
+          git commit -m "Sync changes from public repo"
+          git push origin HEAD
