@@ -51,6 +51,8 @@ end
 function Database:load_data()
     if not FS.Exists(self.pathFilename) then
         self.Logger:warn("Data file does not exist: " .. self.pathFilename)
+        self.data = {}
+        self:save_data()
         return {}
     end
     local data_file = io.open(self.pathFilename, "r")
@@ -74,6 +76,7 @@ function Database:save_hash()
 end
 
 function Database:save_data()
+    self.Logger:debug("Saving data file database: " .. self.filename)
     local data_file = io.open(self.pathFilename, "w")
     if data_file then
         data_file:write(Util.JsonPrettify(Util.JsonEncode(self.data)) .. "\n")

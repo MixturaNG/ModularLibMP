@@ -8,7 +8,7 @@ Logger = Logger:clone()
 Logger:setPrefix("ConfigLoader")
 local function loadConfig(path)
     if not FS.Exists(path) then
-        Logger:warn("File Exist is False | Config file not found: " .. path:gsub(FS.ConcatPaths("Resources","Server","ModularLibMP"), ""))
+        Logger:warn("File Exist is False | Config file not found: " .. path:gsub(FS.ConcatPaths(pluginPath), ""))
         return nil
     end
     local file = io.open(path, "r")
@@ -31,14 +31,14 @@ local function TryLoadLocalConfig(modulePath)
     local ret = nil
     ret = loadConfig(FS.ConcatPaths(modulePath,"config.json"))
     if not ret or ret == {} then
-        ret = loadConfig(FS.ConcatPaths("Resources","Server","ModularLibMP","config","main_config.json"))
+        ret = loadConfig(FS.ConcatPaths(pluginPath,"config","main_config.json"))
     end
     return ret
 end
 
 local function MergesConfig(modulePath)
     local locals = loadConfig(FS.ConcatPaths(modulePath,"config.json"))
-    local globals = loadConfig(FS.ConcatPaths("Resources","Server","ModularLibMP","config","main_config.json"))
+    local globals = loadConfig(FS.ConcatPaths(pluginPath,"config","main_config.json"))
     local merged = {}
     if globals then
         for key, value in pairs(globals) do

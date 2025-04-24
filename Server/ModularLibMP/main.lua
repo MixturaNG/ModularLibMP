@@ -5,9 +5,9 @@ os.setlocale( "C", "ctype" );
 os.execute( "chcp 65001 > nul" )
 IKnowWhatDoing = {}
 currentVersion = "0.1"
-luasql = require "luasql.mysql"
+
 print("ModularLibMP BeamMP Plugin v" .. currentVersion .. " loaded")
-print(luasql)
+
 pluginPath = debug.getinfo(1).source:gsub("\\","/")
 pluginPath = pluginPath:sub(1,(pluginPath:find("main.lua"))-2)
 
@@ -24,9 +24,9 @@ ReplaceBaseFunctions.i18text = i18text
 local EventHandler = require("modules.core.event_handler")
 EventHandler:RegEvent()
 
-local Controller = require("modules.core.controller")
-Controller.Event = EventHandler
-Controller:RegEvent()
+--local Controller = require("modules.core.controller")
+--Controller.Event = EventHandler
+--Controller:RegEvent()
 local MessageHandler = require("modules.core.message_handler")
 local ModuleHandler = require("modules.core.module_loader")
 ModuleHandler.i18text = i18text

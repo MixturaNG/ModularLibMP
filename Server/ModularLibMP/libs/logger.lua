@@ -31,9 +31,11 @@ function Logger:init()
     local obj = setmetatable({}, self)
 
     local privat = {}
-        privat.logLevel = loadConfig("Resources/Server/ModularLibMP/config/main_config.json").logLevel
+
+
+        privat.logLevel = loadConfig(FS.ConcatPaths(pluginPath,"config","main_config.json")).logLevel
         privat.logToFile = true
-        privat.logFilePath = "Resources/Server/ModularLibMP/logs/ModularLibMP.log"
+        privat.logFilePath = FS.ConcatPaths(pluginPath,"logs","core.log")
         privat.enableColors = true
         privat.prefix = nil
         privat.levels = {

@@ -1,5 +1,5 @@
 local M = {}
-local config = require(FS.ConcatPaths("libs","config_loader"):gsub("/",".")).loadConfig(FS.ConcatPaths("Resources","Server","ModularLibMP","config","main_config.json"))
+local config = require(FS.ConcatPaths("libs","config_loader"):gsub("/",".")).loadConfig(FS.ConcatPaths(pluginPath,"config","main_config.json"))
 local Logger = require(FS.ConcatPaths("libs","logger"):gsub("/","."))
 Logger:setPrefix("I18Text")
 M.TranslatorLines = {}
@@ -62,7 +62,7 @@ local function loadConfig(module,path)
         module = "base"
     end
     if not FS.Exists(path) then
-        Logger:warn("Config file not found: " .. path:gsub(FS.ConcatPaths("Resources","Server","ModularLibMP"), ""))
+        Logger:warn("Config file not found: " .. path:gsub(pluginPath, ""))
         return nil
     end
     local file = io.open(path, "r")
@@ -116,7 +116,6 @@ local function loadCustomTranslator(path)
     local directories = FS.ListFiles(path)
     if #directories > 0 then
         for _, directory in ipairs(directories) do
-            print(directory)
             loadConfig(directory,FS.ConcatPaths(path,directory))
         end
     end
@@ -274,7 +273,7 @@ local function export()
     exportTable.version = "1.0.0"
     exportTable.uploaded = os.date("%Y-%m-%d %H:%M:%S")
 
-    local file = io.open(FS.ConcatPaths("Resources","Server","ModularLibMP","config","export_translator.json"), "w")
+    local file = io.open(FS.ConcatPaths(pluginPath,"config","export_translator.json"), "w")
     file:write(Util.JsonPrettify(Util.JsonEncode(exportTable)))
     file:close()
 end
